@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memora - AI Memory Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            padding: 1.5rem 5%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, #00b4d8, #90e0ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-button {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, #00b4d8, #90e0ef);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 180, 216, 0.3);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            animation: slideUp 1s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00b4d8, #90e0ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .features {
+            padding: 5rem 5%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #00b4d8, #90e0ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 180, 216, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #00b4d8;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero {
+                padding-top: 100px;
+                text-align: center;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Custom SVG styles */
+        .svg-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        /* Animation classes */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .scroll-animation {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .scroll-animation.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating animation */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Memora</div>
+        <button class="cta-button" id="openChatBtn">Open Memory Assistant</button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your AI-Powered Memory Companion</h1>
+            <p>Memora helps you remember important information, events, and tasks through intelligent conversations and timely reminders. Never forget anything important again.</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card scroll-animation">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Contextual Memory</h3>
+                    <p>Our AI remembers previous conversations and uses context to provide personalized assistance tailored to your needs.</p>
+                </div>
+                <div class="feature-card scroll-animation">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Smart Reminders</h3>
+                    <p>Get proactive reminders about important events, tasks, and commitments right when you need them.</p>
+                </div>
+                <div class="feature-card scroll-animation">
+                    <div class="feature-icon">📚</div>
+                    <h3>Learning Assistant</h3>
+                    <p>Enhance your study process with spaced repetition and interactive quizzes powered by AI.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="section-title">How Memora Works</h2>
+        <div class="feature-grid">
+            <div class="feature-card scroll-animation">
+                <div class="feature-icon">💬</div>
+                <h3>Tell Me Anything</h3>
+                <p>Share information naturally through conversation. Memora understands and organizes what's important.</p>
+            </div>
+            <div class="feature-card scroll-animation">
+                <div class="feature-icon">🔍</div>
+                <h3>Ask When Needed</h3>
+                <p>Retrieve information anytime by asking naturally. Memora finds exactly what you're looking for.</p>
+            </div>
+            <div class="feature-card scroll-animation">
+                <div class="feature-icon">🔄</div>
+                <h3>Continuous Learning</h3>
+                <p>The more you interact, the better Memora understands your preferences and memory patterns.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Memora AI. All rights reserved.</p>
+    </footer>
+
+
+    <script type="module">
+        import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+        
+        // Initialize chatbot
+        const initChatbot = () => {
+            Chatbot.init({
+                chatflowid: "c96ac91d-017c-4959-ba55-bbb2bfcbceb5",
+                apiHost: "https://6skdfztl.rpcld.co",
+                theme: {
+                    button: {
+                        backgroundColor: '#00b4d8',
+                        right: 20,
+                        bottom: 20,
+                        size: 60,
+                        dragAndDrop: true,
+                        iconColor: 'white',
+                        customIconSrc: '/assest/speech-bubble_12237467.png',
+                        autoWindowOpen: {
+                            autoOpen: false,
+                            openDelay: 2,
+                            autoOpenOnMobile: false
+                        }
+                    },
+                    tooltip: {
+                        showTooltip: true,
+                        tooltipMessage: 'Need to remember something?',
+                        tooltipBackgroundColor: '#1a1a2e',
+                        tooltipTextColor: 'white',
+                        tooltipFontSize: 16
+                    },
+                    disclaimer: {
+                        title: 'Memory Assistant',
+                        message: "Memora will help you remember important information. All data is processed securely.",
+                        textColor: 'white',
+                        buttonColor: '#00b4d8',
+                        buttonText: 'Start Remembering',
+                        buttonTextColor: 'white',
+                        blurredBackgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        backgroundColor: '#16213e'
+                    },
+                    chatWindow: {
+                        showTitle: true,
+                        showAgentMessages: true,
+                        title: 'Memora AI',
+                        titleAvatarSrc: '/assest/4166058.png',
+                        welcomeMessage: 'Hello! I\'m Memora, your AI memory assistant. You can tell me anything you want to remember, and I\'ll help you recall it when needed. What would you like me to remember today?',
+                        errorMessage: 'Sorry, I\'m having trouble remembering that right now. Please try again later.',
+                        backgroundColor: '#16213e',
+                        height: 700,
+                        width: 400,
+                        fontSize: 16,
+                        starterPrompts: [
+                            "Remember that my doctor's appointment is next Tuesday at 2pm",
+                            "I need to buy milk and eggs tomorrow",
+                            "What did I ask you to remember last week?"
+                        ],
+                        starterPromptFontSize: 15,
+                        clearChatOnReload: false,
+                        renderHTML: true,
+                        botMessage: {
+                            backgroundColor: '#1a1a2e',
+                            textColor: '#ffffff',
+                            showAvatar: true,
+                            avatarSrc: '/assest/4166058.png'
+                        },
+                        userMessage: {
+                            backgroundColor: '#00b4d8',
+                            textColor: '#ffffff',
+                            showAvatar: true,
+                            avatarSrc: '/assest/man_4140048.png'
+                        },
+                        textInput: {
+                            placeholder: 'Tell me something to remember...',
+                            backgroundColor: '#1a1a2e',
+                            textColor: '#ffffff',
+                            sendButtonColor: '#00b4d8',
+                            maxChars: 500,
+                            maxCharsWarningMessage: 'That\'s quite a lot to remember! Try to keep it under 500 characters.',
+                            autoFocus: true
+                        },
+                        footer: {
+                            textColor: '#ffffff',
+                            text: 'Powered by',
+                            company: 'The-Cheater',
+                            companyLink: '#'
+                        }
+                    }
+                }
+            });
+        };
+
+        // Initialize on button click
+        document.getElementById('openChatBtn').addEventListener('click', initChatbot);
+
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-animation').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Initialize chatbot after 5 seconds if not opened manually
+        setTimeout(() => {
+            if (!document.querySelector('flowise-chatbot')) {
+                initChatbot();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
